@@ -32,14 +32,16 @@ local function toggle_telescope(harpoon_files)
 		:find()
 end
 
+-- Update list of files to use with harpoon
 vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end)
 vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
---
+
+-- Harpoon keymaps for J K L ;
 vim.keymap.set("n", "<C-j>", function() harpoon:list():select(1) end)
 vim.keymap.set("n", "<C-k>", function() harpoon:list():select(2) end)
 vim.keymap.set("n", "<C-l>", function() harpoon:list():select(3) end)
 vim.keymap.set("n", "<C-;>", function() harpoon:list():select(4) end)
---
+
 -- -- Toggle previous & next buffers stored within Harpoon list
 vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
@@ -47,6 +49,14 @@ vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
 -- Terminal mode binds
 vim.keymap.set("t", "<C-j>", function() harpoon:list():select(1) end)
 vim.keymap.set("t", "<C-k>", function() harpoon:list():select(2) end)
+
 -- vim.keymap.set("t", "<C-l>", function() harpoon:list():select(3) end)
 vim.keymap.set("t", "<C-;>", function() harpoon:list():select(4) end)
 vim.keymap.set({ "t" }, "<ESC>", [[<C-\><C-n>]], { desc = "" })
+
+-- Harpoon-like mark jumping
+vim.keymap.set("n", "<C-a>", [['a zz]])
+vim.keymap.set("n", "<C-s>", [['s zz]])
+
+-- Quick project file tree
+vim.keymap.set("n", "<C-t>", [[:term exa -T<CR>]])
