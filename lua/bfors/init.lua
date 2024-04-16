@@ -57,6 +57,8 @@ vim.keymap.set({ "t" }, "<ESC>", [[<C-\><C-n>]], { desc = "" })
 -- Harpoon-like mark jumping
 vim.keymap.set("n", "<C-a>", [['a zz]])
 vim.keymap.set("n", "<C-s>", [['s zz]])
+vim.keymap.set("i", "<C-a>", [[<ESC>'a zzi]])
+vim.keymap.set("i", "<C-s>", [[<ESC>'s zzi]])
 
 -- Quick project file tree
 vim.keymap.set("n", "<C-t>", [[:term exa -T<CR>]])
