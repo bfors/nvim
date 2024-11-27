@@ -2,10 +2,12 @@ vim.opt.autochdir = false
 vim.keymap.set({ "n" }, "<leader>c", [[:w<CR>:!cargo run<CR>]], { desc = "" })
 vim.keymap.set({ "n" }, "<leader>p", [[:w<CR>:!python %<CR>]], { desc = "" })
 vim.keymap.set({ "n" }, "<leader>t", [[:w<CR>:term python %<CR>]], { desc = "" })
+
 vim.keymap.set({ "n" }, "<leader>fs", [[:w<CR>]], { desc = "" })
 vim.keymap.set({ "n" }, "<leader>bp", [[:bp<CR>]], { desc = "" })
 vim.keymap.set({ "n" }, "<leader>bn", [[:bn<CR>]], { desc = "" })
-vim.keymap.set({ "n" }, "<leader>bd", [[:bd<CR>]], { desc = "" })
+vim.keymap.set({ "n" }, "<leader>bd", [[:bp<bar>sp<bar>bn<bar>bd<CR>]], { desc = "" })
+vim.keymap.set({ "n" }, "<leader>q", [[:bd<CR>]], { desc = "" })
 
 local harpoon = require("harpoon")
 
@@ -33,7 +35,7 @@ local function toggle_telescope(harpoon_files)
 end
 
 -- Update list of files to use with harpoon
-vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end)
+vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
 vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
 -- Harpoon keymaps for J K L ;
@@ -61,4 +63,28 @@ vim.keymap.set("i", "<C-a>", [[<ESC>'a zzi]])
 vim.keymap.set("i", "<C-s>", [[<ESC>'s zzi]])
 
 -- Quick project file tree
-vim.keymap.set("n", "<C-t>", [[:term exa -T<CR>]])
+vim.keymap.set("n", "<C-t>", [[:term lsd -I '*__pycache__*' -I '*egg-info' --tree<CR>]])
+
+local plpath = require("plenary.path")
+
+local function load_commands(relative_path)
+	local abspath = plpath.absolute(relative_path)
+	local local_func = dofile(abspath)
+	if local_func ~= nil then
+		vim.keymap.set({ "n" }, "<leader>t", ":w<CR>:term " .. local_func["test"] .. "<CR>", { desc = "" })
+		vim.keymap.set({ "n" }, "<leader>y", ":w<CR>:split<CR>:term " .. local_func["execute"] .. "<CR>", { desc = "" })
+		vim.keymap.set({ "t" }, "<leader>t", ":w<CR>:term " .. local_func["test"] .. "<CR>", { desc = "" })
+		vim.keymap.set({ "t" }, "<leader>y", ":w<CR>:split<CR>:term " .. local_func["execute"] .. "<CR>", { desc = "" })
+	end
+end
+
+local path1 = plpath:new("../commands.lua")
+local path2 = plpath:new("../../commands.lua")
+
+if plpath.exists(path1) then
+	print(path1)
+	load_commands(path1)
+elseif plpath.exists(path2) then
+	print(path2)
+	load_commands(path2)
+end
